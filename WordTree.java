@@ -1,12 +1,14 @@
 // 4645G-04 - Algoritmos e Estruturas de Dados I
 // 2023-1
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class WordTree {
     
     // Classe interna
     private class CharNode {
+
         private char character;
 	    private String significado;
         private boolean isFinal;
@@ -14,11 +16,21 @@ public class WordTree {
         private List<CharNode> children;
 
         public CharNode(char character) {
-            ...
+            this.character = character;
+            significado = "";
+            isFinal = false;
+            father = null;
+            this.children=new ArrayList<CharNode>();
         }
         
         public CharNode(char character, boolean isFinal) {
-            ...
+            this.character = character;
+            significado = "";
+            this.isFinal = isFinal;
+            father = null;
+            this.children=new ArrayList<CharNode>();
+            //nChilds?
+
         }
 
         /**
@@ -27,11 +39,22 @@ public class WordTree {
         * @param isfinal - se é final da palavra ou não
         */
         public CharNode addChild (char character, boolean isfinal) {
-            ...
+            //aux = new ArrayList<CharNode>();
+            CharNode node = new CharNode(character, isfinal);
+            this.children.add(node);
+            return node;
+
+
+
+            // public boolean add(E e) {
+            //     modCount++;
+            //     add(e, elementData, size);
+            //     return true;
+            // }
         }
         
         public int getNumberOfChildren () {
-            ...
+            return children.size();
         }
         
         public CharNode getChild (int index) {
@@ -67,18 +90,19 @@ public class WordTree {
 
     // Construtor
     public WordTree() {
-      ...
+        CharNode newNode = new CharNode(' ');
+            this.root=newNode;
     }
 
 
     
     // Metodos
     public int getTotalWords() {
-        ...
+        return totalWords;
     }
 
     public int getTotalNodes() {
-        ...
+        return totalNodes;
     }
     
     /**
@@ -86,7 +110,9 @@ public class WordTree {
     *@param word
     */
     public void addWord(String word) {
-        ...
+        for (char letra : word.toCharArray()) {
+            // ...
+        }
     }
     
     /**
