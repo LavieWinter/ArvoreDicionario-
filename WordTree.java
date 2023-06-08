@@ -53,7 +53,11 @@ public class WordTree {
         }
         
         public CharNode getChild (int index) {
-            return null;
+            if(index >= 0 && index <= this.nChilds)
+                return children.get(index);
+            
+            else
+                return null;
         }
 
         /**
@@ -69,7 +73,14 @@ public class WordTree {
         * @param character - caracter a ser encontrado.
         */
         public CharNode findChildChar (char character) {
-         
+            CharNode node;
+            for(int i = 0; i < this.nChilds; i++)
+            {
+                node = this.getChild(i);
+                if (node.character == character){
+                    return node;
+                }
+            }
             return null;
         }
         
