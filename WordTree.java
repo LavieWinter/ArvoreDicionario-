@@ -14,6 +14,7 @@ public class WordTree {
         private boolean isFinal;
         private CharNode father;
         private List<CharNode> children;
+        private int nChilds;
 
         public CharNode(char character) {
             this.character = character;
@@ -21,6 +22,7 @@ public class WordTree {
             isFinal = false;
             father = null;
             this.children=new ArrayList<CharNode>();
+            nChilds = 0;
         }
         
         public CharNode(char character, boolean isFinal) {
@@ -29,7 +31,7 @@ public class WordTree {
             this.isFinal = isFinal;
             father = null;
             this.children=new ArrayList<CharNode>();
-            //nChilds?
+            nChilds = 0;
 
         }
 
@@ -38,19 +40,12 @@ public class WordTree {
         * @param character - caracter a ser adicionado
         * @param isfinal - se é final da palavra ou não
         */
+
         public CharNode addChild (char character, boolean isfinal) {
-            //aux = new ArrayList<CharNode>();
             CharNode node = new CharNode(character, isfinal);
             this.children.add(node);
+            nChilds++;
             return node;
-
-
-
-            // public boolean add(E e) {
-            //     modCount++;
-            //     add(e, elementData, size);
-            //     return true;
-            // }
         }
         
         public int getNumberOfChildren () {
@@ -58,7 +53,7 @@ public class WordTree {
         }
         
         public CharNode getChild (int index) {
-            ...
+            return null;
         }
 
         /**
@@ -74,7 +69,8 @@ public class WordTree {
         * @param character - caracter a ser encontrado.
         */
         public CharNode findChildChar (char character) {
-            ...
+         
+            return null;
         }
         
     }
@@ -109,9 +105,38 @@ public class WordTree {
     *Adiciona palavra na estrutura em árvore
     *@param word
     */
+
+
     public void addWord(String word) {
+        // fazer lógica anterior ao acrescimos das letras
+        
+        CharNode aux = root;
+        int tamanho = word.length();
+        int index = -1;
+        char[] palavra = word.toCharArray();
+
+
         for (char letra : word.toCharArray()) {
-            // ...
+            if(aux.findChildChar(letra) != null) {
+                aux = aux.findChildChar(letra);
+                index++;
+            }
+            else break;
+        }
+        if ((tamanho - index) != 0) {
+            for(int i = index; i < tamanho; i++) {
+                if ((tamanho - index) > 1)
+                {
+                    aux.addChild(palavra[i], false);
+                    totalNodes++;
+                }
+                else
+                {
+                    aux.addChild(palavra[i], true);
+                    totalNodes++;
+                    totalWords++;
+                }
+            }
         }
     }
     
@@ -122,6 +147,7 @@ public class WordTree {
      */
     private CharNode findCharNodeForWord(String word) {
         ...
+        
     }
 
     /**
