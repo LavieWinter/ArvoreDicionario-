@@ -1,4 +1,3 @@
-
 public class Palavra {
     private String palavra;
     private String significado;
@@ -20,6 +19,4 @@ public class Palavra {
     public String toString() {
         return palavra + ": " + significado + "\n";
     }
-
-    
 }
