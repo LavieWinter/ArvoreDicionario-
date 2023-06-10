@@ -11,24 +11,21 @@ public class WordTree {
 
         private char character;
 	    private String significado;
-        private boolean isFinal;
         private CharNode father;
         private List<CharNode> children;
         private int nChilds;
 
         public CharNode(char character) {
             this.character = character;
-            significado = "";
-            isFinal = false;
+            significado = null;
             father = null;
             this.children=new ArrayList<CharNode>();
             nChilds = 0;
         }
         
-        public CharNode(char character, boolean isFinal) {
+        public CharNode(char character, String significado) {
             this.character = character;
-            significado = "";
-            this.isFinal = isFinal;
+            this.significado = significado;
             father = null;
             this.children=new ArrayList<CharNode>();
             nChilds = 0;
@@ -41,9 +38,18 @@ public class WordTree {
         * @param isfinal - se é final da palavra ou não
         */
 
-        public CharNode addChild (char character, boolean isfinal) {
-            CharNode node = new CharNode(character, isfinal);
+        public CharNode addChild (char character) {
+            CharNode node = new CharNode(character);
             this.children.add(node);
+            node.father = this;
+            nChilds++;
+            return node;
+        }
+
+        public CharNode addChild (char character, String significado) {
+            CharNode node = new CharNode(character, significado);
+            this.children.add(node);
+            node.father = this;
             nChilds++;
             return node;
         }
@@ -65,9 +71,27 @@ public class WordTree {
          * @return a palavra
          */
         private String getWord() {
-            ...
+            if(significado != null) {
+                List<Character> letters = new ArrayList<>();
+                letters.add(this.character);
+                CharNode before = father;
+                while(before != null) {
+                    letters.add(before.character);
+                    before = before.father;
+                }
+                String word = "";
+                for(int i = letters.size()-1; i >= 0; i--) {
+                    word += letters.get(i);
+                }
+                return word;
+            }
+            return null;
         }
         
+        public String getSignificado () {
+            return significado;
+        }
+
         /**
         * Encontra e retorna o nodo que tem determinado caracter.
         * @param character - caracter a ser encontrado.
@@ -90,15 +114,16 @@ public class WordTree {
     
     // Atributos
     private CharNode root;
-    private int totalNodes = 0;
-    private int totalWords = 0;
+    private int totalNodes;
+    private int totalWords;
     
 
 
     // Construtor
     public WordTree() {
-        CharNode newNode = new CharNode(' ');
-            this.root=newNode;
+        this.root = new CharNode(' ');
+        this.totalNodes = 0;
+        this.totalWords = 0;
     }
 
 
@@ -118,35 +143,38 @@ public class WordTree {
     */
 
 
-    public void addWord(String word) {
+    public void addWord(String word, String significado) {
         // fazer lógica anterior ao acrescimos das letras
         
         CharNode aux = root;
         int tamanho = word.length();
-        int index = -1;
-        char[] palavra = word.toCharArray();
+        int index = 0;
+        char[] palavra = word.toLowerCase().toCharArray();
 
 
-        for (char letra : word.toCharArray()) {
-            if(aux.findChildChar(letra) != null) {
-                aux = aux.findChildChar(letra);
+        for (char letra : palavra) {
+            CharNode tmp = aux.findChildChar(letra);
+            if(tmp != null) {
+                aux = tmp;
                 index++;
             }
             else break;
         }
-        if ((tamanho - index) != 0) {
+        if (index < tamanho) {
             for(int i = index; i < tamanho; i++) {
-                if ((tamanho - index) > 1)
+                CharNode prox;
+                if (i != tamanho-1)
                 {
-                    aux.addChild(palavra[i], false);
+                    prox = aux.addChild(palavra[i]);
                     totalNodes++;
                 }
                 else
                 {
-                    aux.addChild(palavra[i], true);
+                    prox = aux.addChild(palavra[i], significado);
                     totalNodes++;
                     totalWords++;
                 }
+                aux = prox;
             }
         }
     }
@@ -156,18 +184,36 @@ public class WordTree {
      * @param word
      * @return o nodo final encontrado
      */
-    private CharNode findCharNodeForWord(String word) {
-        ...
-        
-    }
+    // private CharNode findCharNodeForWord(String word) {
+        // ...
+        // 
+    // }
 
     /**
     * Percorre a árvore e retorna uma lista com as palavras iniciadas pelo prefixo dado.
     * Tipicamente, um método recursivo.
     * @param prefix
     */
-    public List<String> searchAll(String prefix) {
-        ...
+    public List<Palavra> searchAll(String prefix) {
+        List<Palavra> palavras = new ArrayList<>();
+        char[] letras = prefix.toLowerCase().toCharArray();
+        CharNode aux = root;
+        for(int i = 0; i < letras.length; i++) {
+            aux = aux.findChildChar(letras[i]);
+        }
+        findWords(aux, palavras);
+        return palavras;
     }   
 
+    private void findWords (CharNode node, List<Palavra> lista) {
+        if(node == null) {
+            return;
+        }
+        if(node.significado != null) {
+            lista.add(new Palavra(node.getWord(), node.getSignificado()));
+        }
+        for(int i = 0; i < node.getNumberOfChildren(); i++) {
+            findWords(node.getChild(i), lista);
+        }
+    }
 }
