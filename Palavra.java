@@ -17,6 +17,6 @@ public class Palavra {
 
     @Override
     public String toString() {
-        return palavra + ": " + significado + "\n";
+        return (palavra + ": " + significado + "\n");
     }
 }

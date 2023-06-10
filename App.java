@@ -27,5 +27,5 @@ public class App {
         System.out.println("Lista de palavras e seus significados" + lista);
         
     }
-
+ 
 }
