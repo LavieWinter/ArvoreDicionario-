@@ -50,5 +50,7 @@ public class App {
                 System.out.println("\n"+ p.getPalavra() +": "+ p.getSignificado());
             }
         }
+
+        sc.close();
     }
 }
