@@ -80,7 +80,7 @@ public class WordTree {
                     before = before.father;
                 }
                 String word = "";
-                for(int i = letters.size()-1; i >= 0; i--) {
+                for(int i = letters.size()-2; i >= 0; i--) {
                     word += letters.get(i);
                 }
                 return word;
